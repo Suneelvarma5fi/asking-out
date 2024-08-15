@@ -31,20 +31,17 @@
         }
         .buttons {
             height: 70%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-content: flex-start;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(7, 1fr);
+            gap: 10px;
             padding: 10px;
-            overflow-y: auto;
         }
         .btn {
-            padding: 10px 20px;
             font-size: 14px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            margin: 5px;
         }
         .yes {
             background-color: rgba(255, 255, 255, 0.2);
@@ -56,8 +53,6 @@
         }
         .no {
             background-color: #ff4d4d;
-            position: absolute;
-            transition: all 0.3s;
         }
         @keyframes celebrate {
             0% { background-position: 0% 50%; }
@@ -76,19 +71,23 @@
     </div>
 
     <script>
-        function moveButton(btn) {
-            const container = document.querySelector('.buttons');
-            const rect = container.getBoundingClientRect();
-            const btnRect = btn.getBoundingClientRect();
+        const totalButtons = 70;
+        const noButtonIndex = Math.floor(Math.random() * totalButtons);
 
-            const maxX = rect.width - btnRect.width;
-            const maxY = rect.height - btnRect.height;
+        function moveNoButton() {
+            const buttons = document.querySelectorAll('.btn');
+            const currentNoButton = document.querySelector('.no');
+            const newIndex = Math.floor(Math.random() * totalButtons);
+            
+            currentNoButton.classList.remove('no');
+            currentNoButton.classList.add('yes');
+            currentNoButton.textContent = 'Yes';
+            currentNoButton.onclick = celebrate;
 
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-
-            btn.style.left = `${randomX}px`;
-            btn.style.top = `${randomY}px`;
+            buttons[newIndex].classList.remove('yes');
+            buttons[newIndex].classList.add('no');
+            buttons[newIndex].textContent = 'No';
+            buttons[newIndex].onclick = moveNoButton;
         }
 
         function celebrate() {
@@ -102,23 +101,14 @@
 
         function createButtons() {
             const container = document.getElementById('buttonsContainer');
-            const buttonWidth = 100; // Approximate width of a button
-            const buttonHeight = 50; // Approximate height of a button
-            const containerWidth = container.clientWidth;
-            const containerHeight = container.clientHeight;
-
-            const buttonsPerRow = Math.floor(containerWidth / buttonWidth);
-            const numberOfRows = Math.floor(containerHeight / buttonHeight);
-
-            const totalButtons = buttonsPerRow * numberOfRows;
+            container.innerHTML = ''; // Clear existing buttons
 
             for (let i = 0; i < totalButtons; i++) {
                 const button = document.createElement('button');
-                if (Math.random() < 0.2) { // 20% chance for a 'No' button
+                if (i === noButtonIndex) {
                     button.className = 'btn no';
                     button.textContent = 'No';
-                    button.onmouseover = () => moveButton(button);
-                    button.onclick = () => moveButton(button);
+                    button.onclick = moveNoButton;
                 } else {
                     button.className = 'btn yes';
                     button.textContent = 'Yes';
@@ -129,7 +119,6 @@
         }
 
         window.onload = createButtons;
-        window.onresize = createButtons;
     </script>
 </body>
 </html>
