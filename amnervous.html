@@ -22,7 +22,7 @@
             box-sizing: border-box;
         }
         .question-container {
-            height: calc(30% + 20px);
+            height: 40%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -44,9 +44,10 @@
             font-size: 20px;
             color: black;
             margin: 0;
+            padding: 20px 0;
         }
         .buttons {
-            height: calc(70% - 20px);
+            height: calc(60% - 20px);
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
@@ -61,9 +62,14 @@
             border: 0.5px solid rgba(0, 0, 0, 0.5);
             border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.2);
+            background-image: url('https://image.shutterstock.com/image-vector/tiny-hearts-pattern-transparent-background-260nw-1187672487.jpg');
+            background-size: 30px 30px;
+            background-repeat: no-repeat;
+            background-position: center;
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
             color: black;
+            opacity: 0.9;
         }
         .yes:hover {
             transform: scale(1.05);
@@ -76,6 +82,21 @@
         @keyframes celebrate {
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
+        }
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink {
+            from { border-right-color: transparent; }
+            to { border-right-color: black; }
+        }
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid black;
+            animation: typewriter 3s steps(40) 1s 1 normal both, blink 500ms steps(40) infinite;
         }
     </style>
 </head>
@@ -148,7 +169,12 @@
 
         function updateQuestion() {
             const questionElement = document.getElementById('question');
-            questionElement.textContent = questions[Math.min(noAttempts, questions.length - 1)];
+            questionElement.innerHTML = ''; // Clear current content
+            const newQuestion = questions[Math.min(noAttempts, questions.length - 1)];
+            const typewriterEffect = document.createElement('span');
+            typewriterEffect.className = 'typewriter';
+            typewriterEffect.textContent = newQuestion;
+            questionElement.appendChild(typewriterEffect);
         }
 
         function celebrate() {
