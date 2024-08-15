@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
@@ -19,40 +20,51 @@
             display: flex;
             flex-direction: column;
         }
-        .question {
+        .question-container {
             height: 30%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
             z-index: 10;
+            padding: 20px;
+        }
+        .question-box {
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 20px;
+            text-align: center;
+        }
+        .question {
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            color: #333;
+            margin: 0;
         }
         .buttons {
             height: 70%;
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(7, 1fr);
             gap: 10px;
             padding: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
         }
         .btn {
             font-size: 14px;
             cursor: pointer;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 5px;
-        }
-        .yes {
             background-color: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
         .yes:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
         .no {
             background-color: #ff4d4d;
+            color: white;
         }
         @keyframes celebrate {
             0% { background-position: 0% 50%; }
@@ -62,8 +74,10 @@
 </head>
 <body>
     <div class="container">
-        <div class="question">
-            <h1>Will you go out on a date with me?????</h1>
+        <div class="question-container">
+            <div class="question-box">
+                <h1 class="question" id="question">Will you go out on a date with me?</h1>
+            </div>
         </div>
         <div class="buttons" id="buttonsContainer">
             <!-- Buttons will be dynamically added here -->
@@ -71,13 +85,23 @@
     </div>
 
     <script>
-        const totalButtons = 70;
-        const noButtonIndex = Math.floor(Math.random() * totalButtons);
+        let totalButtons = 70;
+        let noButtonIndex = Math.floor(Math.random() * totalButtons);
+        let noAttempts = 0;
+        const questions = [
+            "Will you go out on a date with me?",
+            "Are you saying 'No'?",
+            "Seriously?",
+            "Am asking for the last time, can we go on a date?"
+        ];
 
         function moveNoButton() {
             const buttons = document.querySelectorAll('.btn');
             const currentNoButton = document.querySelector('.no');
-            const newIndex = Math.floor(Math.random() * totalButtons);
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * totalButtons);
+            } while (newIndex === Array.from(buttons).indexOf(currentNoButton));
             
             currentNoButton.classList.remove('no');
             currentNoButton.classList.add('yes');
@@ -87,7 +111,27 @@
             buttons[newIndex].classList.remove('yes');
             buttons[newIndex].classList.add('no');
             buttons[newIndex].textContent = 'No';
-            buttons[newIndex].onclick = moveNoButton;
+            buttons[newIndex].onclick = handleNoClick;
+
+            // Animate the movement
+            buttons[newIndex].style.transition = 'all 0.5s ease';
+            buttons[newIndex].style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                buttons[newIndex].style.transform = 'scale(1)';
+            }, 500);
+
+            updateQuestion();
+        }
+
+        function handleNoClick(event) {
+            event.preventDefault();
+            noAttempts++;
+            moveNoButton();
+        }
+
+        function updateQuestion() {
+            const questionElement = document.getElementById('question');
+            questionElement.textContent = questions[Math.min(noAttempts, questions.length - 1)];
         }
 
         function celebrate() {
@@ -95,7 +139,7 @@
             document.body.style.backgroundSize = '1800% 1800%';
             document.body.style.animation = 'celebrate 18s ease infinite';
             document.querySelector('.container').style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
-            document.querySelector('.question').innerHTML = '<h1>Yay! It\'s a date! 🎉</h1>';
+            document.querySelector('.question').innerHTML = 'Yay! It\'s a date! 🎉';
             document.querySelector('.buttons').style.display = 'none';
         }
 
@@ -103,12 +147,24 @@
             const container = document.getElementById('buttonsContainer');
             container.innerHTML = ''; // Clear existing buttons
 
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            const buttonSize = Math.min(containerWidth, containerHeight) / 10; // Assuming we want at least 10 buttons per row/column
+            const columns = Math.floor(containerWidth / buttonSize);
+            const rows = Math.floor(containerHeight / buttonSize);
+
+            totalButtons = Math.min(totalButtons, columns * rows);
+            noButtonIndex = Math.floor(Math.random() * totalButtons);
+
+            container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+            container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
             for (let i = 0; i < totalButtons; i++) {
                 const button = document.createElement('button');
                 if (i === noButtonIndex) {
                     button.className = 'btn no';
                     button.textContent = 'No';
-                    button.onclick = moveNoButton;
+                    button.onclick = handleNoClick;
                 } else {
                     button.className = 'btn yes';
                     button.textContent = 'Yes';
@@ -119,6 +175,7 @@
         }
 
         window.onload = createButtons;
+        window.onresize = createButtons;
     </script>
 </body>
 </html>
