@@ -4,12 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
             overflow: hidden;
         }
         .container {
@@ -31,15 +30,16 @@
             padding: 20px;
         }
         .question-box {
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(0, 0, 0, 0.5);
             border-radius: 25px;
             padding: 20px;
             text-align: center;
+            background-color: rgba(0, 0, 0, 0.5);
         }
         .question {
-            font-family: 'Pacifico', cursive;
-            font-size: 24px;
-            color: #333;
+            font-weight: 100;
+            font-size: 20px;
+            color: white;
             margin: 0;
         }
         .buttons {
@@ -53,11 +53,12 @@
         .btn {
             font-size: 14px;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
             border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            color: black;
         }
         .yes:hover {
             transform: scale(1.05);
@@ -89,10 +90,16 @@
         let noButtonIndex = Math.floor(Math.random() * totalButtons);
         let noAttempts = 0;
         const questions = [
-            "Will you go out on a date with me?",
-            "Are you saying 'No'?",
-            "Seriously?",
-            "Am asking for the last time, can we go on a date?"
+            "Will you go out on a date with me? 😊",
+            "Are you sure? Pretty please? 🥺",
+            "Come on, it'll be fun! 😃",
+            "Don't make me beg... 😅",
+            "I promise I'm not that bad! 😉",
+            "What if I bring chocolate? 🍫",
+            "You're breaking my heart here... 💔",
+            "Is that a maybe? 🤔",
+            "I'm running out of ideas... 😓",
+            "Last chance, date with me? 🙏"
         ];
 
         function moveNoButton() {
@@ -113,7 +120,6 @@
             buttons[newIndex].textContent = 'No';
             buttons[newIndex].onclick = handleNoClick;
 
-            // Animate the movement
             buttons[newIndex].style.transition = 'all 0.5s ease';
             buttons[newIndex].style.transform = 'scale(1.1)';
             setTimeout(() => {
@@ -145,11 +151,11 @@
 
         function createButtons() {
             const container = document.getElementById('buttonsContainer');
-            container.innerHTML = ''; // Clear existing buttons
+            container.innerHTML = '';
 
             const containerWidth = container.clientWidth;
             const containerHeight = container.clientHeight;
-            const buttonSize = Math.min(containerWidth, containerHeight) / 10; // Assuming we want at least 10 buttons per row/column
+            const buttonSize = Math.min(containerWidth, containerHeight) / 10;
             const columns = Math.floor(containerWidth / buttonSize);
             const rows = Math.floor(containerHeight / buttonSize);
 
