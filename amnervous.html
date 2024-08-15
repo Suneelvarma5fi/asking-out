@@ -24,23 +24,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 10;
             padding: 20px;
+            box-sizing: border-box;
+            width: 100%;
         }
         .question-box {
-            border: 2px solid rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 0, 0, 1);
             border-radius: 25px;
             padding: 20px;
             text-align: center;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-sizing: border-box;
         }
         .question {
-            font-weight: 100;
-            font-size: 20px;
+            font-weight: 300;
+            font-size: 24px;
             color: white;
             margin: 0;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
         .buttons {
             height: 70%;
@@ -53,7 +55,7 @@
         .btn {
             font-size: 14px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(0, 0, 0, 0.7);
             border-radius: 5px;
             background-color: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(5px);
