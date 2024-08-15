@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Invitation</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            height: 100%;
+            background-image: url('your-image-url-here.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+        }
+        .question {
+            height: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 10;
+        }
+        .buttons {
+            height: 70%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-start;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .yes {
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        .yes:hover {
+            transform: scale(1.1);
+        }
+        .no {
+            background-color: #ff4d4d;
+            position: absolute;
+            transition: all 0.3s;
+        }
+        @keyframes celebrate {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="question">
+            <h1>Will you go out on a date with me?</h1>
+        </div>
+        <div class="buttons" id="buttonsContainer">
+            <!-- Buttons will be dynamically added here -->
+        </div>
+    </div>
+
+    <script>
+        function moveButton(btn) {
+            const container = document.querySelector('.buttons');
+            const rect = container.getBoundingClientRect();
+            const btnRect = btn.getBoundingClientRect();
+
+            const maxX = rect.width - btnRect.width;
+            const maxY = rect.height - btnRect.height;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            btn.style.left = `${randomX}px`;
+            btn.style.top = `${randomY}px`;
+        }
+
+        function celebrate() {
+            document.body.style.background = 'linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3)';
+            document.body.style.backgroundSize = '1800% 1800%';
+            document.body.style.animation = 'celebrate 18s ease infinite';
+            document.querySelector('.container').style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+            document.querySelector('.question').innerHTML = '<h1>Yay! It\'s a date! 🎉</h1>';
+            document.querySelector('.buttons').style.display = 'none';
+        }
+
+        function createButtons() {
+            const container = document.getElementById('buttonsContainer');
+            const buttonWidth = 100; // Approximate width of a button
+            const buttonHeight = 50; // Approximate height of a button
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            const buttonsPerRow = Math.floor(containerWidth / buttonWidth);
+            const numberOfRows = Math.floor(containerHeight / buttonHeight);
+
+            const totalButtons = buttonsPerRow * numberOfRows;
+
+            for (let i = 0; i < totalButtons; i++) {
+                const button = document.createElement('button');
+                if (Math.random() < 0.2) { // 20% chance for a 'No' button
+                    button.className = 'btn no';
+                    button.textContent = 'No';
+                    button.onmouseover = () => moveButton(button);
+                    button.onclick = () => moveButton(button);
+                } else {
+                    button.className = 'btn yes';
+                    button.textContent = 'Yes';
+                    button.onclick = celebrate;
+                }
+                container.appendChild(button);
+            }
+        }
+
+        window.onload = createButtons;
+        window.onresize = createButtons;
+    </script>
+</body>
+</html>
